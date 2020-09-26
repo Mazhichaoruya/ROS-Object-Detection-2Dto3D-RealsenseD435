@@ -1,0 +1,46 @@
+//
+// Created by mzc on 2020/9/25.
+//
+//#include "include.h"
+#include "ros/ros.h"
+#include "std_msgs/String.h"
+#include "realsense_d435/objection.h"
+#include "realsense_d435/objectionsofonemat.h"
+#include <sensor_msgs/PointCloud2.h>
+using namespace std;
+class SubscribeAndPublish
+{
+public:
+    SubscribeAndPublish()
+    {
+        //Topic you want to subscribe
+        sub_ = n_.subscribe("Objections", 10, &SubscribeAndPublish::callback, this);
+        //Topic you want to publish
+        pub_ = n_.advertise<sensor_msgs::PointCloud2>("Point_cloud", 10);
+    }
+
+    void callback(const realsense_d435::objectionsofonemat &Objections)
+    {
+        sensor_msgs::PointCloud2 pointcloud;
+        ROS_INFO("The Objection has:%d ",Objections.sizeofobjections,":\n" );
+        for(auto objection:Objections.objectionsofonemat){
+            ROS_INFO(objection.classname.data(),":");
+            cout<<"CenterPoint:"<<objection.center_point.x<<" "<<objection.center_point.y<<" "<<objection.center_point.z<<endl;
+        }
+        pointcloud=Objections.pointcloud;
+        pub_.publish(pointcloud);
+    }
+
+private:
+    ros::NodeHandle n_;
+    ros::Publisher pub_;
+    ros::Subscriber sub_;
+
+};
+
+int main(int argc, char** argv) {
+    ros::init(argc,argv,"Objection_views");
+    SubscribeAndPublish SuPuObjection;
+    ros::spin();
+    return  0;
+}
