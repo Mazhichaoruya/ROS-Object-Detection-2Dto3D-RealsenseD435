@@ -54,9 +54,8 @@ rviz
 Then You can see the Pointcloud By Rviz(Add Display By topic,Choose The Pointcloud2,and change the Fixed Frame as "Objections_Pointcloud")
 ## Example  
 ROS version on 9-26:
-RGBD and Center position:  
+The different color Point means different classes,such ad Person,mouse,book,Tv and soon on,We can see the 3D Point  in the camera coordinate system.
 ![Example1](https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435/blob/master/gif/realsense_1.gif)
-Point Cloud of Objections: 
 ![Example2](https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435/blob/master/gif/realsense_2.gif) 
 ## To be continue  
 I will Take ROS-Pack with Lidar Slam and Tr to run on robot on  last week.
