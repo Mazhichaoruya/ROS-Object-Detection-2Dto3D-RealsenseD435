@@ -1,12 +1,13 @@
 # ROS-Object-Detection-2Dto3D-RealsenseD435
-
+## Source code Version
+[Object-Detection-and-location-RealsenseD435](https://github.com/Mazhichaoruya/Object-Detection-and-location-RealsenseD435.git)
 ## Requirements
 Ubuntu18.04 OR 16.04  
 ROS melodic(Has been Tested) Kinetic
 [Opencv 4.x](https://github.com/opencv/opencv.git)  
 C++ 11_std At least,I used the C++ 17 std  
 Eigen3 :in absolutely Path /usr/local/eigen3  
-PCL lib>=1.7.1  
+PCL >=1.7.1,I used ros-melodic's default config PCL(1.8.1)    
 [Intel Realsense SDK >=2.0 ](https://github.com/IntelRealSense/librealsense.git)  
 [Yolov3 by Darknet](https://pjreddie.com/darknet/yolo/)  
 ## How to use
@@ -15,8 +16,8 @@ git clone https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-Realsense
 cd  ROS-Object-Detection-2Dto3D-RealsenseD435/Yolo_model
 wget https://pjreddie.com/media/files/yolov3.weights ;wget https://pjreddie.com/media/files/yolov3-tiny.weights
 ```
-For avoiding unreasonable troubles,I used the absolute path,so you have to change the path in src/main.cpp   
-on line 25-27
+For avoiding unreasonable troubles,I used the absolute path,so you have to change the path in src/Publisher_realsense.cpp   
+on line 38-40
 ```cpp
 String yolo_tiny_model ="/home/mzc/code/CLionProjects/DNN435/Yolo_model/yolov3.weights";
 String yolo_tiny_cfg =  "/home/mzc/code/CLionProjects/DNN435/Yolo_model/yolov3.cfg";
@@ -33,7 +34,7 @@ cd ~/ROS-Object-Detection-2Dto3D-RealsenseD435/
 mv realsense_d435/ ~/catkin_ws/src
 catkin_make
 ```
-Attention:Default parameter on line 243 and 244 in src/main.cpp   
+Attention:Default parameter on line 282 and 283 in src/Publisher_realsense.cpp   
 ```cpp
     net.setPreferableBackend(DNN_BACKEND_OPENCV);// DNN_BACKEND_INFERENCE_ENGINE DNN_BACKEND_CUDA
     net.setPreferableTarget(DNN_TARGET_CPU);//DNN_TARGET_CUDA
