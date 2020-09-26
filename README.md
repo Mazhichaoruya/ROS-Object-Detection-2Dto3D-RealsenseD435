@@ -1,6 +1,6 @@
 # ROS-Object-Detection-2Dto3D-RealsenseD435
+
 ## Requirements
-### C++ Version
 Ubuntu18.04 OR 16.04  
 ROS melodic(Has been Tested) Kinetic
 [Opencv 4.x](https://github.com/opencv/opencv.git)  
@@ -11,10 +11,9 @@ PCL lib>=1.7.1
 [Yolov3 by Darknet](https://pjreddie.com/darknet/yolo/)  
 ## How to use
 ```Bash
-git clone https://github.com/Mazhichaoruya/Objection-Detection-and-location-RealsenseD435.git
-cd  Objection-Detection-and-location-RealsenseD435/Yolo_model
+git clone https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435.git
+cd  ROS-Object-Detection-2Dto3D-RealsenseD435/Yolo_model
 wget https://pjreddie.com/media/files/yolov3.weights ;wget https://pjreddie.com/media/files/yolov3-tiny.weights
-cd Objection-Detection-and-location-RealsenseD435/C++/;uzip dlib.zip
 ```
 For avoiding unreasonable troubles,I used the absolute path,so you have to change the path in src/main.cpp   
 on line 25-27
@@ -24,12 +23,15 @@ String yolo_tiny_cfg =  "/home/mzc/code/CLionProjects/DNN435/Yolo_model/yolov3.c
 String classname_path="/home/mzc/code/CLionProjects/DNN435/Yolo_model/object_detection_classes_yolov3.txt";
 ``` 
 You can use your weight by Darknet or others supported by DNN too   
+Next creat your ROS woekspace to us it.
 ```
+cd ~
+mkdir -p catkin_ws/src
 cd ..
-mkdir bulid; cd build
-cmake ..
-make
-./DNN_Yolo
+catkin_make
+cd ~/ROS-Object-Detection-2Dto3D-RealsenseD435/
+mv realsense_d435/ ~/catkin_ws/src
+catkin_make
 ```
 Attention:Default parameter on line 243 and 244 in src/main.cpp   
 ```cpp
@@ -40,20 +42,18 @@ if you have IntelCore CPU you can chose "DNN_BACKEND_INFERENCE_ENGINE"to acceler
 But you should make sure your CPU is Intel and the Contrib of Opencv has been installed.  
 If you have GPU(From Nvidia),You can Think about The Cuda acceleration.Before this you should reinstall Your Opencv(Version Most>4.2) with This:[OpenCV_DNN](https://medium.com/@sb.jaduniv/how-to-install-opencv-4-2-0-with-cuda-10-1-on-ubuntu-20-04-lts-focal-fossa-bdc034109df3)  
 Open the Cuda Setting when CMake.
-## Python
-When you install the essential job ,just run the main.py,the model will start to work.
+## Test 
+New a Terminal on every command
 ```
-cd Python   
-python3 main.py
+roscore
+rosrun realsense_d435_pub
+rosrun realsense_d435_sub
+rviz
 ```
-## Example
-Old_version:  
-![Old_version](https://github.com/Mazhichaoruya/Objection-Detection-and-location-RealsenseD435/blob/master/Gif/Old_version.gif)  
-The windows show the Classname and Position in Camera coordinate system of Objection  
-New version on 9-21:
+Then You can see the Pointcloud By Rviz(Add Display By topic,Choose The Pointcloud2,and change the Fixed Frame as "Objections_Pointcloud")
+## Example  
+ROS version on 9-26:
 RGBD and Center position:  
-![RGBD](https://github.com/Mazhichaoruya/Objection-Detection-and-location-RealsenseD435/blob/master/Gif/RGBD.gif)
+![Example1](https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435/blob/master/gif/realsense_1.gif)
 Point Cloud of Objections: 
-![PointCloud](https://github.com/Mazhichaoruya/Objection-Detection-and-location-RealsenseD435/blob/master/Gif/PointCloud.gif) 
-
-## Relevant Job
+![Example2](https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435/blob/master/gif/realsense_2.gif) 

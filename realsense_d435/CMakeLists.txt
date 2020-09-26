@@ -155,9 +155,9 @@ add_executable(realsense_d435_pub src/Publisher_realsense.cpp src/Position_Trans
 target_link_libraries(realsense_d435_pub ${catkin_LIBRARIES} ${OpenCV_LIBS} ${Boost_LIBRARIES} ${realsense2_LIBRARY} ${PCL_LIBRARIES} )#dlib::dlib
 add_dependencies(realsense_d435_pub ${PROJECT_NAME}_generate_message_cpp)
 
-add_executable(realsen_d435_sub src/Subscriber_realsense.cpp)
-target_link_libraries(realsen_d435_sub ${catkin_LIBRARIES})
-add_dependencies(realsen_d435_sub ${PROJECT_NAME}_generate_messages_cpp)
+add_executable(realsense_d435_sub src/Subscriber_realsense.cpp)
+target_link_libraries(realsense_d435_sub ${catkin_LIBRARIES})
+add_dependencies(realsense_d435_sub ${PROJECT_NAME}_generate_messages_cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
