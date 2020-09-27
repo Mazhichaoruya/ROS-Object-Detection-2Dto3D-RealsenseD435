@@ -58,4 +58,4 @@ The different color Point means different classes,such ad Person,mouse,book,Tv a
 ![Example1](https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435/blob/master/gif/realsense_1.gif)
 ![Example2](https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435/blob/master/gif/realsense_2.gif) 
 ## To be continue  
-I will Take ROS-Pack with Lidar Slam and Tr to run on robot on  last week.
+I will Take ROS-Pack with Lidar Slam and Tr to run on robot on  next  week.
