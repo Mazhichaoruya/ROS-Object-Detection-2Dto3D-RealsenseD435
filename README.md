@@ -2,6 +2,7 @@
 ## Source code Version
 [Object-Detection-and-location-RealsenseD435](https://github.com/Mazhichaoruya/Object-Detection-and-location-RealsenseD435.git)
 ## Object Dection with SLAM 
+With SLAM(SC-Lego-LOAM)  ：  
 [Perception-of-Autonomous-mobile-robot](https://github.com/Mazhichaoruya/Perception-of-Autonomous-mobile-robot)
 ## Requirements
 Ubuntu18.04 OR 16.04  
@@ -59,5 +60,5 @@ ROS version on 9-26:
 The different color Point means different classes,such ad Person,mouse,book,Tv and soon on,We can see the 3D Point  in the camera coordinate system.
 ![Example1](https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435/blob/master/gif/realsense_1.gif)
 ![Example2](https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435/blob/master/gif/realsense_2.gif) 
-## To be continue  
-I will Take ROS-Pack with Lidar Slam and Tr to run on robot  next  week.
+With SLAM：  
+[![Watch the video](https://github.com/Mazhichaoruya/Perception-of-Autonomous-mobile-robot/blob/master/image/image.png)](https://www.youtube.com/watch?v=VE7d3ZQzOLY&t=19s)
