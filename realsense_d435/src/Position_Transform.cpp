@@ -23,7 +23,7 @@ Eigen::Vector2f Position_Transform::Get_DepthToColorImg(Eigen::Vector3f Pix_P) {
     Depth_cam = CD_Rotation.inverse() *(Pix_P - CD_Transation);
     Eigen::Vector3f D_m = Depth_inner*Depth_cam;
 //    cout<<"C3:"<<Color_3(2)<<endl;
-    Depth_Pix_Transform<< (D_m(0)/Color_cam(2)<639 ? D_m(0)/Color_cam(2):639 ) ,(D_m(1)/Color_cam(2)<479? D_m(1)/Color_cam(2): 479);//限制坐标宽度不要越界
+    Depth_Pix_Transform<< (D_m(0)/Color_cam(2)<(WidthCam-1) ? D_m(0)/Color_cam(2):(WidthCam-1) ) ,(D_m(1)/Color_cam(2)<(HeightCam-1)? D_m(1)/Color_cam(2): (HeightCam-1));//限制坐标宽度不要越界
     return Depth_Pix_Transform;
 }
 std::array<int,2> Position_Transform::Report_Depth_Pix(){
@@ -51,8 +51,8 @@ Position_Transform::Position_Transform(std::array<int,2> Pix,bool flag) {
     }
     else{
         Depth_Pix=Pix;
-//        Depth_Pix.at(0)=Pix.at(0)<639 ? Pix.at(0):639 ;// false means Depth_Pix
-//        Depth_Pix.at(1)=Pix.at(1)<479 ? Pix.at(1):479 ;// false means Depth_Pix
+//        Depth_Pix.at(0)=Pix.at(0)<(WidthCam-1) ? Pix.at(0):(WidthCam-1) ;// false means Depth_Pix
+//        Depth_Pix.at(1)=Pix.at(1)<(HeightCam-1) ? Pix.at(1):(HeightCam-1) ;// false means Depth_Pix
     }
     Get_camera_referance();//初始化相机参数 初始化深度图Depthmate
 }

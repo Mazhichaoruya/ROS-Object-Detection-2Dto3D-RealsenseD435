@@ -1,0 +1,11 @@
+<launch>
+    <!--底盘串口通信与键盘控制-->
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch"/>
+    <!-- realsense d435 Objection-->
+    <node pkg="realsense_d435" type="realsense_d435_pub" name="realsense_Object" output="screen"/>
+    <node pkg="realsense_d435" type="realsense_d435_sub" name="Object_views" output="screen"/>
+    <!--- TF 变换 相机 雷达和ROS坐标系之间的转换-->
+    <node pkg="tf" type="static_transform_publisher" name="pointcloud_init_to_camera"  args="0 0 0 0   0        0 /camera    /objects 30" />
+    <!--<node pkg="tf" type="static_transform_publisher" name="camera_init_to_map"  args="0 0 0 1.570795   0        1.570795 /map    /camera_init 10" />
+    <node pkg="tf" type="static_transform_publisher" name="base_link_to_camera" args="0 0 0 -1.570795 -1.570795 0        /camera /base_link   10" />-->
+</launch>

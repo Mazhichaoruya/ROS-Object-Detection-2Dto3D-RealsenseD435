@@ -14,20 +14,20 @@ public:
     SubscribeAndPublish()
     {
         //Topic you want to subscribe
-        sub_ = n_.subscribe("Objections", 10, &SubscribeAndPublish::callback, this);
+        sub_ = n_.subscribe("Objects", 10, &SubscribeAndPublish::callback, this);
         //Topic you want to publish
         pub_ = n_.advertise<sensor_msgs::PointCloud2>("Point_cloud", 10);
     }
 
-    void callback(const realsense_d435::objectionsofonemat &Objections)
+    void callback(const realsense_d435::objectionsofonemat &Objects)
     {
         sensor_msgs::PointCloud2 pointcloud;
-        ROS_INFO("The Objection has:%d ",Objections.sizeofobjections,":\n" );
-        for(auto objection:Objections.objectionsofonemat){
+        ROS_INFO("The Objection has:%d ",Objects.sizeofobjections,":\n" );
+        for(auto objection:Objects.objectionsofonemat){
             ROS_INFO(objection.classname.data(),":");
             cout<<"CenterPoint:"<<objection.center_point.x<<" "<<objection.center_point.y<<" "<<objection.center_point.z<<endl;
         }
-        pointcloud=Objections.pointcloud;
+        pointcloud=Objects.pointcloud;
         pub_.publish(pointcloud);
     }
 

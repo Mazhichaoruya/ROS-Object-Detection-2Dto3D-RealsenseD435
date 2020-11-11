@@ -6,9 +6,7 @@
 #include "Algorithm_Objection_3D.h"
 #include "time.h"
 using namespace std;
-using namespace cv;
-//using namespace dlib;
-Objection::Objection(Rect Box, int ID){
+Objection::Objection(cv::Rect Box, int ID){
     Aera_Objection_R=Area_limit(Box);//初始化RGB图像目标框
     ClassID=ID;
     Classname=classNamesVec[ID];//目标类别名称
@@ -24,16 +22,16 @@ Objection::Objection(Rect Box, int ID){
         ss << "("<<static_cast<int>(Point_Camera.at(0))<<","<<static_cast<int>(Point_Camera.at(1))<<","<<static_cast<int>(Point_Camera.at(2)) <<")";
     else
         ss<<"Null";
-    putText(color_mat, ss.str(), Point(Point_img.at(0), Point_img.at(1)), 0, 0.3, Scalar(0, 255, 0));
+    putText(color_mat, ss.str(), cv::Point(Point_img.at(0), Point_img.at(1)), 0, 0.3, cv::Scalar(0, 255, 0));
 }
-Rect  Objection::Area_limit(Rect Box) {
-    Rect Obj;
+cv::Rect  Objection::Area_limit(cv::Rect Box) {
+    cv::Rect Obj;
     Obj.x=(Box.x<0 ? 0:Box.x);//起始点越界检测
     Obj.y=(Box.y<0 ? 0:Box.y);
     Obj.height=(Box.y<0 ? Box.height+Box.y:Box.height); //起始点越界修正目标的宽度和高度
     Obj.width=(Box.x<0 ? Box.width+Box.x:Box.width);
-    Obj.height=(Obj.height+Obj.y>479 ? 479-Obj.y:Obj.height);//目标框大小越界检测
-    Obj.width=(Obj.width+Obj.x>639 ? 639-Obj.x:Obj.width);
+    Obj.height=(Obj.height+Obj.y>(HeightCam-1) ? (HeightCam-1)-Obj.y:Obj.height);//目标框大小越界检测
+    Obj.width=(Obj.width+Obj.x>(WidthCam-1) ? (WidthCam-1)-Obj.x:Obj.width);
     return Obj;
 }
 void Objection::CheckStartPoint() {
@@ -55,7 +53,7 @@ void Objection::Transform_ImgtoCam() {
        Enable= true;
     else Enable= false;
 }
-float Objection::Get_Area_Depth(Rect Box) {
+float Objection::Get_Area_Depth(cv::Rect Box) {
     std::array<int,Stride*Stride> Arr_Box;
     int result;
     for (int i = Box.y; i < Box.y+Box.height; ++i)
@@ -93,13 +91,13 @@ void Objection::DealRect() {
     ///3D点聚类算法
     ///目标区域稀疏化 获取稀疏化之后的点云信息
     int height=0,width=0;
-    Mat Object_Area_Depth = Depthmate(Area_Objection_D);//截取目标范围的深度图
+    cv::Mat Object_Area_Depth = Depthmate(Area_Objection_D);//截取目标范围的深度图
 //    Mat Object_Sparse_Depth=Mat::zeros(Size(Object_Area_Depth.cols/Stride,Object_Area_Depth.rows/Stride),CV_16U);
     for (int i = 0; i < Object_Area_Depth.rows-Stride; i += Stride) {
         height++;width=0;
         for (int j = 0; j < Object_Area_Depth.cols-Stride; j += Stride) {
-            array<int, 2> Sparse_Point{(Area_Objection_D.x + j + Stride / 2)>639 ? 639:(Area_Objection_D.x + j + Stride / 2), (Area_Objection_D.y + i + Stride / 2)>479 ? 479:Area_Objection_D.y + i + Stride / 2};
-            Rect Area_ele(Area_Objection_D.x + j, Area_Objection_D.y + i, Stride, Stride);
+            array<int, 2> Sparse_Point{(Area_Objection_D.x + j + Stride / 2)>(WidthCam-1) ? (WidthCam-1):(Area_Objection_D.x + j + Stride / 2), (Area_Objection_D.y + i + Stride / 2)>(HeightCam-1) ? (HeightCam-1):Area_Objection_D.y + i + Stride / 2};
+            cv::Rect Area_ele(Area_Objection_D.x + j, Area_Objection_D.y + i, Stride, Stride);
 //            Object_Sparse_Depth.at<uint16_t>(i/Stride,j/Stride)=Get_Area_Depth(Area_ele);
             auto Depth_value = Get_Area_Depth(Area_ele);//稀疏化
 //            if (Depth_value==0)

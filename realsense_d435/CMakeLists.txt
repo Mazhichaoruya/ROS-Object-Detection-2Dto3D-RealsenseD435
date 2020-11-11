@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(realsense_d435)
 set(CMAKE_CXX_STANDARD 17)
-set(OpenCV_DIR "/usr/local/share/opencv4")
+#set(OpenCV_DIR "/usr/local/share/opencv4")
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
 
@@ -15,25 +15,42 @@ find_package(catkin REQUIRED COMPONENTS
         rospy
         std_msgs
         sensor_msgs
+        cv_bridge
         image_transport
 )
-find_package(OpenCV REQUIRED )
+find_package(OpenCV 3 REQUIRED )
+#find_package(OpenCV REQUIRED
+#PATHS /usr/local/share # look here, mat /usr/local
+#NO_DEFAULT_PATH	)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 #[[boost]]
-find_package(Boost REQUIRED COMPONENTS system thread)
-include_directories(${Boost_INCLUDE_DIRS})
+#find_package(Boost REQUIRED COMPONENTS system thread)
+#include_directories(${Boost_INCLUDE_DIRS})
 # eigen
 include_directories( "/usr/include/eigen3/" )
 # Find librealsense2 installed package
-find_package(realsense2 REQUIRED)
+#find_package(realsense2 REQUIRED)
 #add_subdirectory(./dlib dlib_build)
 find_package(PCL REQUIRED)
 include_directories( ${PCL_INCLUDE_DIRS} )
 add_definitions( ${PCL_DEFINITIONS} )
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
-
+#CUDA
+option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
+#set(CMAKE_BUILD_TYPE Debug)
+find_package(CUDA REQUIRED)
+set(CUDA_NVCC_PLAGS ${CUDA_NVCC_PLAGS};-std=c++11;-g;-G;-gencode;arch=compute_30;code=sm_30)
+# include and link dirs of cuda and tensorrt, you need adapt them if yours are different
+# cuda
+include_directories(/usr/local/cuda/include)
+link_directories(/usr/local/cuda/lib64)
+# tensorrt
+include_directories(/usr/include/x86_64-linux-gnu/)
+link_directories(/usr/lib/x86_64-linux-gnu/)
+cuda_add_library(myplugins SHARED ${PROJECT_SOURCE_DIR}/include/yololayer.cu)
+target_link_libraries(myplugins nvinfer cudart)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Ofast -Wfatal-errors -D_MWAITXINTRIN_H_INCLUDED")
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
@@ -124,7 +141,7 @@ add_definitions( ${PCL_DEFINITIONS} )
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES realsense_d435
-  CATKIN_DEPENDS geometry_msgs message_generation message_runtime roscpp rospy std_msgs sensor_msgs image_transport
+  CATKIN_DEPENDS geometry_msgs message_generation message_runtime roscpp rospy std_msgs sensor_msgs cv_bridge image_transport
 #  DEPENDS system_lib
 )
 
@@ -152,12 +169,12 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/realsense_d435_node.cpp)
 add_executable(realsense_d435_pub src/Publisher_realsense.cpp src/Position_Transform.cpp src/Objection.cpp  src/Algorithm_Objection_3D.cpp) ##Yolov3_tiny.cpp  set_D435.cpp rs-D435.cpp rs-pointcloud.cpp src/Realsense_config.cpp src/GetCameraReferance.cpp src/Test.cpp
-target_link_libraries(realsense_d435_pub ${catkin_LIBRARIES} ${OpenCV_LIBS} ${Boost_LIBRARIES} ${realsense2_LIBRARY} ${PCL_LIBRARIES} )#dlib::dlib
-add_dependencies(realsense_d435_pub ${PROJECT_NAME}_generate_message_cpp)
-
+target_link_libraries(realsense_d435_pub ${catkin_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES} nvinfer cudart myplugins )#dlib::dlib   ${realsense2_LIBRARY} ${Boost_LIBRARIES}
+#add_dependencies(realsense_d435_pub ${PROJECT_NAME}_generate_message_cpp)
+add_definitions(-O2 -pthread)
 add_executable(realsense_d435_sub src/Subscriber_realsense.cpp)
 target_link_libraries(realsense_d435_sub ${catkin_LIBRARIES})
-add_dependencies(realsense_d435_sub ${PROJECT_NAME}_generate_messages_cpp)
+#add_dependencies(realsense_d435_sub ${PROJECT_NAME}_generate_messages_cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
