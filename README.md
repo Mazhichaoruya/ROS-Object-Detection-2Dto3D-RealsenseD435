@@ -16,7 +16,7 @@ TensorRT: Go to [Object-Detection-and-location-RealsenseD435](https://github.com
 ```Bash
 git clone https://github.com/Mazhichaoruya/ROS-Object-Detection-2Dto3D-RealsenseD435.git
 ```
-Next creat your ROS woekspace to us it.
+Next create your ROS workspace to use it.
 ```
 cd ~
 mkdir -p catkin_ws/src
